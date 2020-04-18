@@ -30,18 +30,17 @@ function App(props) {
   return (
     <div className="App">
         <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-                {!token && (
-                    <a
-                        className="btn btn--loginApp-link"
-                        href={`${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join("%20")}&response_type=token&show_dialog=true`}
-                    >
-                        Login to Spotify
-                    </a>
-                )}
-                {token && (
-                    <Home />
-                )}
+            {!token && (
+                <a
+                    className="btn btn--loginApp-link"
+                    href={`${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join("%20")}&response_type=token&show_dialog=true`}
+                >
+                    Login to Spotify
+                </a>
+            )}
+            {token && (
+                <Home />
+            )}
         </header>
     </div>
   );

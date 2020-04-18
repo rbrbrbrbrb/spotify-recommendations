@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
-import { clientId, scopes } from './env';
+import { scopes } from './constants';
 import Home from './Home';
 export const authEndpoint = 'https://accounts.spotify.com/authorize';
 const redirectUri = 'http://localhost:3000';
@@ -33,13 +33,15 @@ function App(props) {
             {!token && (
                 <a
                     className="btn btn--loginApp-link"
-                    href={`${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join("%20")}&response_type=token&show_dialog=true`}
+                    href={`${authEndpoint}?client_id=${process.env.REACT_APP_CLIENTID}&redirect_uri=${redirectUri}&scope=${scopes.join("%20")}&response_type=token&show_dialog=true`}
                 >
                     Login to Spotify
                 </a>
             )}
             {token && (
-                <Home />
+                <Home
+                    token={token}
+                />
             )}
         </header>
     </div>

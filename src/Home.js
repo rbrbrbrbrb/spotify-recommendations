@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import Filter from './Filter'
 
 const initialParamsState = {
     min_valence: 0,
@@ -47,28 +48,15 @@ const Home = (props) => {
         <div className="container">
             <h2>Get Spotify recommendation based on...</h2>
             <div className="selectors-row">
-                <div className="selector valence">
-                    <h4>Valence</h4>
-                    <p>
-                        A measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track. Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), while tracks with low valence sound more negative (e.g. sad, depressed, angry).
-                    </p>
-                    <div>
-                        Minimum:
-                            <input
-                                type="textbox"
-                                className="number-input"
-                                value={filter_params.min_valence}
-                                onChange={(e) => onChangeParam('min_valence', e.target.value)}
-                            />
-                    </div>
-                    <div>
-                    Maximum:  <input type="textbox" />
-                    </div>
-                </div>
-                <div className="selector danceablility">
-                    Minimum:  <input type="textbox" />
-                    Maximum:  <input type="textbox" />
-                </div>
+                <Filter
+                    filter_field={'valence'}
+                    min={filter_params.min_valence}
+                    max={filter_params.max_valence}
+                    onChangeParam={onChangeParam}
+                    description={
+                        'description here'
+                    }
+                />
             </div>
         </div>
     );

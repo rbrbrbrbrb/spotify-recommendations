@@ -57,6 +57,57 @@ const Home = (props) => {
                         'description here'
                     }
                 />
+
+                <Filter
+                    filter_field={'danceability'}
+                    min={filter_params.min_danceability}
+                    max={filter_params.max_danceability}
+                    onChangeParam={onChangeParam}
+                    description={
+                        'description here'
+                    }
+                />
+
+                <Filter
+                    filter_field={'energy'}
+                    min={filter_params.min_energy}
+                    max={filter_params.max_energy}
+                    onChangeParam={onChangeParam}
+                    description={
+                        'description here'
+                    }
+                />
+
+                <Filter
+                    filter_field={'popularity'}
+                    min={filter_params.min_popularity}
+                    max={filter_params.max_popularity}
+                    onChangeParam={onChangeParam}
+                    description={
+                        'description here'
+                    }
+                />
+
+                <Filter
+                    filter_field={'instrumentalness'}
+                    min={filter_params.min_instrumentalness}
+                    max={filter_params.max_instrumentalness}
+                    onChangeParam={onChangeParam}
+                    description={
+                        'description here'
+                    }
+                />
+
+                <Filter
+                    filter_field={'liveness'}
+                    min={filter_params.min_liveness}
+                    max={filter_params.max_liveness}
+                    onChangeParam={onChangeParam}
+                    description={
+                        'description here'
+                    }
+                />
+
             </div>
         </div>
     );

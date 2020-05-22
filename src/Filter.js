@@ -3,27 +3,28 @@ import React from 'react';
 const Filter = (props) => {
 
 
-    let {onChangeParam, filter_field, min, max, description} = props
+    let {onChangeParam, filter_field, val, description} = props
     return (
         <div className="selector" id={`selector-${props.filter_field}`}>
             <h4>{filter_field}</h4>
             <p>{description}</p>
             <div>
-                Minimum:
+                Value:
+                {/*
                 <input
                     type="textbox"
                     className="number-input"
-                    value={props.min}
-                    onChange={(e) => onChangeParam(`min_${props.filter_field}`, e.target.value)}
+                    value={val}
+                    onChange={(e) => onChangeParam(props.filter_field, e.target.value)}
                 />
-            </div>
-            <div>
-                Maximum:
+                */}
+                <p>{val}</p>
                 <input
-                    type="textbox"
-                    className="number-input"
-                    value={props.max}
-                    onChange={(e) => onChangeParam(`max_${props.filter_field}`, e.target.value)}
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={val}
+                    onChange={(e) => onChangeParam(props.filter_field, e.target.value)}
                 />
             </div>
          </div>

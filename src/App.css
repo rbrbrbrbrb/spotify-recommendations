@@ -31,10 +31,15 @@
 .selectors-row {
   display: flex;
   flex-direction: horizontal;
+  margin: 20px;
 }
 
 .selector {
   flex: 1;
+}
+
+.songbox {
+  text-align: left;
 }
 
 .number-input {

@@ -1,31 +1,67 @@
 import React, {useState, useEffect} from 'react';
 import Filter from './Filter'
+import Song from './Song'
+import Seed from './Seed'
 
 const initialParamsState = {
-    min_valence: 0,
-    max_valence: 1,
-    min_danceability: 0,
-    max_danceability: 1,
-    min_energy: 0,
-    max_energy: 1,
-    min_popularity: 0,
-    max_popularity: 100,
-    min_instrumentalness: 0,
-    max_instrumentalness: 1,
-    min_liveness: 0,
-    max_liveness: 1
+    valence: 50,
+    danceability: 50,
+    energy: 50,
+    popularity: 50,
+    instrumentalness: 50,
+    liveness: 50,
 };
+
+const initialSeedsState = {
+    artist_seed: '',
+    genre_seed: '',
+    track_seed: ''
+}
 
 const Home = (props) => {
     const [genrepool, setGenrePool] = useState([]);
     const [filter_params, setFilterParams] = useState(initialParamsState);
+    const [seeds, setSeeds] = useState(initialSeedsState);
+    const [songs, setSongs] = useState([]);
 
     useEffect(() => {
         //test spotify api call
         //get genre seeds
-        let token = props.token;
+        //let token = props.token;
+
+        //fetch(
+        //    'https://api.spotify.com/v1/recommendations/available-genre-seeds', {
+        //        headers: {
+        //            Authorization: `Bearer ${token}`
+        //        }
+        //    }
+        //)
+        //.then(res => res.json())
+        //.then(json => {
+        //    console.log(json.genres);
+        //    setGenrePool(json.genres);
+        //});
+        //fetchSongs();
+    }, [props.token]);
+
+    const fetchSongs = () => {
+        //create query string
+        let {token} = props;
+        
+        let artist_q = seeds.artist_seed !== '' ? 'seed_artists=' + seeds.artist_seed : ''
+        let genre_q = seeds.genre_seed !== '' ? 'seed_genres=' + seeds.genre_seed : ''
+        let track_q = seeds.track_seed !== '' ? 'seed_tracks=' + seeds.track_seed : ''
+        let qstringseeds = artist_q + genre_q + track_q
+        let qstringparams = Object.keys(filter_params).map((k) => {
+            let passval = k !== 'popularity' ? filter_params[k]/100 : filter_params[k];
+            return `target_${k}=${passval}`;
+        }).join('&');
+        let qstringdebug = 'seed_artists=5vBSrE1xujD2FXYRarbAXc&target_valence=0.05';
+        let full_url = 'https://api.spotify.com/v1/recommendations?' + qstringseeds + '&' + qstringparams;
+        console.log(full_url);
+        //fetch
         fetch(
-            'https://api.spotify.com/v1/recommendations/available-genre-seeds', {
+            full_url, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -33,10 +69,10 @@ const Home = (props) => {
         )
         .then(res => res.json())
         .then(json => {
-            console.log(json.genres);
-            setGenrePool(json.genres);
-        });
-    }, [props.token]);
+            console.log(json);
+            setSongs(json.tracks);
+        })
+    }
 
     const onChangeParam = (key, val) => {
         setFilterParams({
@@ -44,70 +80,97 @@ const Home = (props) => {
             [key]: val
         });
     }
+
+    const onChangeSeed = (key,val) => {
+        setSeeds({
+            ...seeds,
+            [key]: val
+        })
+    }
     return (
         <div className="container">
             <h2>Get Spotify recommendation based on...</h2>
             <div className="selectors-row">
                 <Filter
                     filter_field={'valence'}
-                    min={filter_params.min_valence}
-                    max={filter_params.max_valence}
+                    val={filter_params.valence}
                     onChangeParam={onChangeParam}
                     description={
-                        'description here'
+                        '...'
                     }
                 />
 
                 <Filter
                     filter_field={'danceability'}
-                    min={filter_params.min_danceability}
-                    max={filter_params.max_danceability}
+                    val={filter_params.danceability}
                     onChangeParam={onChangeParam}
                     description={
-                        'description here'
+                        '...'
                     }
                 />
 
                 <Filter
                     filter_field={'energy'}
-                    min={filter_params.min_energy}
-                    max={filter_params.max_energy}
+                    val={filter_params.energy}
                     onChangeParam={onChangeParam}
                     description={
-                        'description here'
+                        '...'
                     }
                 />
-
+            </div>
+            <div className="selectors-row">
                 <Filter
                     filter_field={'popularity'}
-                    min={filter_params.min_popularity}
-                    max={filter_params.max_popularity}
+                    val={filter_params.popularity}
                     onChangeParam={onChangeParam}
                     description={
-                        'description here'
+                        '...'
                     }
                 />
-
+            
                 <Filter
                     filter_field={'instrumentalness'}
-                    min={filter_params.min_instrumentalness}
-                    max={filter_params.max_instrumentalness}
+                    val={filter_params.instrumentalness}
                     onChangeParam={onChangeParam}
                     description={
-                        'description here'
+                        '...'
                     }
                 />
 
                 <Filter
                     filter_field={'liveness'}
-                    min={filter_params.min_liveness}
-                    max={filter_params.max_liveness}
+                    val={filter_params.liveness}
                     onChangeParam={onChangeParam}
                     description={
-                        'description here'
+                        '...'
                     }
                 />
 
+            </div>
+            <div className="selectors-row">
+                <Seed 
+                    filter_field={'track_seed'}
+                    val={filter_params.track_seed}
+                    onChangeSeed={onChangeSeed}
+                />
+                <Seed 
+                    filter_field={'artist_seed'}
+                    val={filter_params.artist_seed}
+                    onChangeSeed={onChangeSeed}
+                />
+                <Seed
+                    filter_field={'genre_seed'}
+                    val={filter_params.genre_seed}
+                    onChangeSeed={onChangeSeed}
+                />
+            </div>
+            <div>
+                <button onClick={fetchSongs}>
+                    Get recommendations
+                </button>
+            </div>
+            <div>
+                {songs.map(s => <Song track={s} key={s.id} />)}
             </div>
         </div>
     );
